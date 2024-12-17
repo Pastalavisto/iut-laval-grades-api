@@ -74,5 +74,5 @@ npm run build
 ### Lancer en production
 
 ```bash
-npm start
+npm run db:setup && npm run start:prod
 ```
