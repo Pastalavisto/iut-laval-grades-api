@@ -185,6 +185,27 @@
  *               format: binary
  *       404:
  *         description: Étudiant non trouvé ou pas de notes
+ * 
+ * /grades/years:
+ *  get:
+ *    summary: Récupère les années académiques des notes
+ *    tags: [Grades]
+ *    security:
+ *      - bearerAuth: []
+ *    responses:
+ *      200:
+ *        description: Liste des années académiques
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: string
+ *                pattern: ^\d{4}-\d{4}$
+ *                example: ["2020-2021", "2021-2022"]
+ *      404:
+ *        description: Aucune année académique trouvée
+ * 
  */
 
 import { Router } from 'express';
@@ -210,5 +231,7 @@ router.put(
   gradeController.update
 );
 router.delete('/:id', gradeController.delete);
+
+router.get('/years', gradeController.getYears);
 
 export const gradeRoutes = router;
