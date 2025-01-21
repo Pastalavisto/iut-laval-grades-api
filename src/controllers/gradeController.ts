@@ -178,11 +178,10 @@ export const gradeController = {
       );
 
       if (gradesResult.rows.length === 0) {
-        throw new AppError(
-          404,
-          'Aucune note trouvée pour cet étudiant',
-          'NO_GRADES_FOUND'
-        );
+        res.status(404).json({
+          message: 'Aucune note trouvée pour cet étudiant',
+          code: 'NO_GRADES_FOUND',
+        });
       }
 
       const pdfBuffer = await PDFService.generateTranscript(
@@ -214,4 +213,19 @@ export const gradeController = {
       );
     }
   },
+
+  async getYears(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await pool.query(
+        'SELECT DISTINCT academic_year as "academicYear" FROM grades ORDER BY academic_year DESC'
+      );
+      const academicYears: string[] = result.rows.map((row) => row.academicYear);
+      res.json(academicYears);
+    } catch (error) {
+      res.status(500).json({
+        message: 'Erreur lors de la récupération des années académiques',
+        code: 'ACADEMIC_YEARS_FETCH_ERROR',
+      });
+    }
+  }
 };
